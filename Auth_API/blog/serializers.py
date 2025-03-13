@@ -3,7 +3,8 @@ from .models import Post
 
 class PostSerializer(serializers.ModelSerializer):
     author = serializers.ReadOnlyField(source='author.username')
+    image = serializers.ImageField(required=False, allow_null=True)  # Make image field optional
 
     class Meta:
         model = Post
-        fields = ('id', 'title', 'content', 'author', 'created_at', 'updated_at')
+        fields = ('id', 'title', 'content', 'author', 'image', 'tags', 'category', 'created_at', 'updated_at')
