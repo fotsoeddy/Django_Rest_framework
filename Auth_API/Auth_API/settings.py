@@ -38,6 +38,7 @@ EMAIL_HOST_PASSWORD = 'your-email-password'
 # Application definition
 
 INSTALLED_APPS = [
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -48,7 +49,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'accounts',
-    'blog'
+    'blog',
+    'drf_yasg'
 
 ]
 AUTH_USER_MODEL = 'accounts.CustomUser'

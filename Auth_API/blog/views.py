@@ -73,6 +73,7 @@ class LikePostView(generics.CreateAPIView, generics.DestroyAPIView):
         post = generics.get_object_or_404(Post, id=post_id)
         Like.objects.filter(post=post, user=request.user).delete()
         return Response({"message": "Post unliked."}, status=status.HTTP_204_NO_CONTENT)
+    
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 
@@ -83,3 +84,18 @@ class PostListCreateView(generics.ListCreateAPIView):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['category', 'author__username']
     search_fields = ['title', 'content', 'tags']
+class BookmarkPostView(generics.CreateAPIView, generics.DestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        post_id = self.kwargs['post_id']
+        post = generics.get_object_or_404(Post, id=post_id)
+        Bookmark.objects.get_or_create(post=post, user=request.user)
+        return Response({"message": "Post bookmarked."}, status=status.HTTP_201_CREATED)
+
+    def destroy(self, request, *args, **kwargs):
+        post_id = self.kwargs['post_id']
+        post = generics.get_object_or_404(Post, id=post_id)
+        Bookmark.objects.filter(post=post, user=request.user).delete()
+        return Response({"message": "Post unbookmarked."}, status=status.HTTP_204_NO_CONTENT)
+
