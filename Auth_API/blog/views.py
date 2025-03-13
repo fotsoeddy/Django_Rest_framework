@@ -32,12 +32,17 @@ from .models import Comment
 from .serializers import CommentSerializer
 
 class CommentListCreateView(generics.ListCreateAPIView):
-    queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    def get_queryset(self):
+        post_id = self.kwargs['post_id']
+        return Comment.objects.filter(post_id=post_id)
+
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        post_id = self.kwargs['post_id']
+        post = generics.get_object_or_404(Post, id=post_id)
+        serializer.save(author=self.request.user, post=post)
 
 class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
@@ -98,4 +103,18 @@ class BookmarkPostView(generics.CreateAPIView, generics.DestroyAPIView):
         post = generics.get_object_or_404(Post, id=post_id)
         Bookmark.objects.filter(post=post, user=request.user).delete()
         return Response({"message": "Post unbookmarked."}, status=status.HTTP_204_NO_CONTENT)
+
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+
+class PostListCreateView(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['category', 'author__username']  # Filter by category or author
+    search_fields = ['title', 'content', 'tags']  # Search by title, content, or tags
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
