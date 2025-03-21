@@ -2,11 +2,11 @@ import requests
 
 
 def get_drinks():
-    response = requests.get('http://localhost:8000/drinks/')
+    response = requests.get('http://localhost:9000/drinks/')
     return response.json()
 
 def create_drink(name, description, price):
-    response = requests.post('http://localhost:8000/drinks/', json={'name': name, 'description': description, 'price': price})
+    response = requests.post('http://localhost:9000/drinks/', json={'name': name, 'description': description, 'price': price})
     return response.json()
 
 def update_drink(drink_id, name=None, description=None, price=None):
@@ -17,36 +17,36 @@ def update_drink(drink_id, name=None, description=None, price=None):
             data['description'] = description
             if price:
                 data['price'] = price
-                response = requests.put(f'http://localhost:8000/drinks/{drink_id}/', json=data)
+                response = requests.put(f'http://localhost:9000/drinks/{drink_id}/', json=data)
                 return response.json()
-            response = requests.put(f'http://localhost:8000/drinks/{drink_id}/', json={'name': name})
+            response = requests.put(f'http://localhost:9000/drinks/{drink_id}/', json={'name': name})
             return response.json()
         if price:
             data['price'] = price
-            response = requests.put(f'http://localhost:8000/drinks/{drink_id}/', json=data)
+            response = requests.put(f'http://localhost:9000/drinks/{drink_id}/', json=data)
             return response.json()
         
-        response = requests.put(f'http://localhost:8000/drinks/{drink_id}/', json={'description': description})
+        response = requests.put(f'http://localhost:9000/drinks/{drink_id}/', json={'description': description})
         return response.json()
     if description:
         data['description'] = description
         if price:
             data['price'] = price
-            response = requests.put(f'http://localhost:8000/drinks/{drink_id}/', json=data)
+            response = requests.put(f'http://localhost:9000/drinks/{drink_id}/', json=data)
             return response.json()
         
-        response = requests.put(f'http://localhost:8000/drinks/{drink_id}/', json={'name': name})
+        response = requests.put(f'http://localhost:9000/drinks/{drink_id}/', json={'name': name})
         
         return response.json()
     if price:
         data['price'] = price
-        response = requests.put(f'http://localhost:8000/drinks/{drink_id}/', json=data)
+        response = requests.put(f'http://localhost:9000/drinks/{drink_id}/', json=data)
         return response.json()
-    response = requests.get(f'http://localhost:8000/drinks/{drink_id}/')
+    response = requests.get(f'http://localhost:9000/drinks/{drink_id}/')
     return response.json()
 
 def delete_drink(drink_id):
-    response = requests.delete(f'http://localhost:8000/drinks/{drink_id}/')
+    response = requests.delete(f'http://localhost:9000/drinks/{drink_id}/')
     return response.status_code == 204
 
 if __name__ == "__main__":
